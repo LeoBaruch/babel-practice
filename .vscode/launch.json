@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "name": "插入行列信息",
+      "program": "${workspaceFolder}/parametersInsert/insertLineInfo",
+      "request": "launch",
+      "type": "node"
+    }
+  ]
+}
