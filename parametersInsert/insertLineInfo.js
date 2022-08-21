@@ -1,8 +1,7 @@
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
-const types = require('@babel/types')
-const generator = require('@babel/generator').default
-
+const types = require('@babel/types');
+const generator = require('@babel/generator').default;
 
 const sourceCode = `
     console.log(2, 1);
@@ -23,24 +22,23 @@ const sourceCode = `
 
 const ast = parser.parse(sourceCode, {
   sourceType: 'unambiguous',
-  plugins: ['jsx']
-})
-
+  plugins: ['jsx'],
+});
 
 traverse(ast, {
   CallExpression(path, state) {
-    if(
+    if (
       types.isMemberExpression(path.node.callee)
       && path.node.callee.object.name === 'console'
       && ['log', 'error', 'debug', 'info'].includes(path.node.callee.property.name)
     ) {
       const { line, column } = path.node.loc.start;
       // 插入一段文本节点
-      path.node.arguments.unshift(types.stringLiteral(`lineInfo: ${line}, ${column}`))
+      path.node.arguments.unshift(types.stringLiteral(`lineInfo: ${line}, ${column}`));
     }
-  }
-})
+  },
+});
 
-const {code, map} = generator(ast);
+const { code, map } = generator(ast);
 
 console.log(code);
